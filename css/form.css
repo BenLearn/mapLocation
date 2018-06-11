@@ -1,0 +1,47 @@
+@charset "UTF-8";
+/** 
+运维定位表单样式表 
+**/
+.myBtn {
+  border-radius: 5px;
+  background: #0F83CE;
+  color: #fff;
+  margin-left: 30px; }
+
+.map_about {
+  padding: 15px 0 0 10px; }
+  .map_about .name {
+    font-size: 20px; }
+  .map_about ul li {
+    color: #333;
+    margin-bottom: 10px; }
+    .map_about ul li span {
+      color: #1489D3; }
+
+.map_title {
+  background: #DAEEF5;
+  padding: 10px; }
+
+.map_nav ul {
+  height: 40px;
+  line-height: 40px;
+  padding: 0;
+  margin: 0; }
+  .map_nav ul li {
+    float: left;
+    height: 100%; }
+    .map_nav ul li a {
+      display: block;
+      color: #0066a7;
+      padding: 0 20px;
+      cursor: pointer; }
+    .map_nav ul li.on {
+      border-bottom: 1px solid #0066a7; }
+
+/** 地图 **/
+.map {
+  position: absolute;
+  top: 41px;
+  right: 0;
+  bottom: 0;
+  left: 0; }

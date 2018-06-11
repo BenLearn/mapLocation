@@ -1,0 +1,163 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <title>流程图-导出图片</title>
+    <!--[if lt IE 9]>
+    <?import namespace="v" implementation="#default#VML" ?>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="../jquery-easyui-1.5/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../jquery-easyui-1.5/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="../css/common.css">
+    <link rel="stylesheet" type="text/css" href="../css/form.css">
+
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../jquery-easyui-1.5/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="http://webapi.amap.com/maps?v=1.4.6&key=dbe4e3a00ed82a65875cdc61f8c15a3c"></script> 
+
+</head>
+<body>
+    <div class="easyui-layout" style="width:100%;height:800px;">
+        <div data-options="region:'east',split:true" title="基本信息" style="width:340px;">
+            <div class="map_about" id="map_about">
+                <div class="name"></div>
+                <ul>
+                    <li>组织：运营部</li>
+                    <li>账号：张三</li>
+                    <li>电话：15944448456</li>
+                    <li>邮箱：15944448456@gzyingling.com</li>
+                    <li>当前位置：广州市天河区五山路371号之一</li>                    
+                </ul>
+                <div>
+                    <button class="easyui-linkbutton myBtn">关联工单</button>
+                    <button class="easyui-linkbutton myBtn">关联资产</button>
+                </div>
+            </div>
+            <div class="map_title margin_t15">查询</div>
+            <div class="padding15">
+                <table style="width:100%;">
+                    <tr>
+                        <td>姓名:</td>
+                        <td><input class="easyui-textbox" type="text" name="name"></input></td>
+                    </tr>
+                    <tr>
+                        <td>组织:</td>
+                        <td><input class="easyui-textbox" type="text" name="organization"></input></td>
+                    </tr>
+                </table>
+                <div class="textc">
+                    <button class="easyui-linkbutton myBtn">搜索</button>
+                </div>
+            </div>
+        </div>
+        <div data-options="region:'center' ">  
+            <nav class="map_nav">
+                <ul>
+                    <li class="on"><a onclick="nav_line();">人员</a></li>
+                    <li><a onclick="nav_line();">区域</a></li>
+                    <li><a onclick="nav_line();">资产</a></li>
+                </ul>
+            </nav>             
+            <section class="map" id="map">
+                                
+            </section>
+        </div>
+    </div>  
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            mapInit();
+        })
+        //tab点击切换
+		function nav_line(){
+            var isHas = $(event.target).parent().hasClass("on");
+            if(!isHas){
+                $(event.target).parent().addClass("on").siblings().removeClass("on");
+                mapInit();
+            }; 
+        }
+        function mapInit(){
+            var myMap = new AMap.Map("map",{
+                zooms: [12,14],
+                zoom:13,//级别
+                center: [113.246439,23.115945],//中心点坐标
+                viewMode:'2D', //使用3D视图
+                lang:'zh_cn',
+            });
+            var iconmin = "../img/icon_positioning.png";
+            /* var markers = [{  //需要填充的图标
+                icon:iconmin,
+                position:[113.235281,23.143413]
+            },{
+                icon:iconmin,
+                position:[113.178118,23.10063]
+            },{
+                icon:iconmin,
+                position:[113.305148,23.116261]
+            }]
+            markers.forEach(function(marker,e){
+                new AMap.Marker({
+                    map:myMap, //地图对象
+                    icon:marker.icon,
+                    position:[marker.position[0],marker.position[1]]
+                })
+                console.log(e);
+            }) */
+            var lnglats = [{
+                "id":23,  //高德第一个marker ID是23,具体。。。。
+                "coordinate":[113.235281,23.143413], //坐标
+                "organize":"运维部", //组织名 
+                "name":"张三",  //账号
+                "phone":"15944448874", //电话
+                "email":"15944448874@gzyingling.com", //邮箱
+                "add":"广州市天河区五山路371号之一",  //当前位置      
+            },{
+                "id":24,  //高德第一个marker ID是23,具体。。。。
+                "coordinate":[113.178118,23.10063], //坐标
+                "organize":"运维部", //组织名 
+                "name":"张三",  //账号
+                "phone":"15944448874", //电话
+                "email":"15944448874@gzyingling.com", //邮箱
+                "add":"广州市天河区五山路371号之一",  //当前位置 
+            },{
+                "id":25,  //高德第一个marker ID是23,具体。。。。
+                "coordinate":[113.305148,23.116261], //坐标
+                "organize":"运维部", //组织名 
+                "name":"张三",  //账号
+                "phone":"15944448874", //电话
+                "email":"15944448874@gzyingling.com", //邮箱
+                "add":"广州市天河区五山路371号之一",  //当前位置 
+            }]
+            
+            var infoWindow = new AMap.InfoWindow({offset: new AMap.Pixel(0, -30)});
+            for(var i=0, marker; i < lnglats.length; i++){
+                var marker = new AMap.Marker({
+                    map:myMap, //地图对象
+                    icon:iconmin, //图标
+                    position:lnglats[i].coordinate
+                })
+                marker.content = '<li>组织：'+lnglats[i].organize+'</li>'
+                    +'<li>组织：'+lnglats[i].id+'</li>'
+                    +'<li>账号：'+lnglats[i].name+'</li>'
+                    +'<li>电话：'+lnglats[i].phone+'</li>'
+                    +'<li>邮箱：'+lnglats[i].email+'</li>'
+                    +'<li>当前位置：'+lnglats[i].add+'</li>';
+                marker.on('click', markerClick);
+                marker.emit('click', {target: marker}); 
+            }  
+            function markerClick(e){                
+                //marker.icon = "../img/icon_big positioning.png";
+                infoWindow.setContent(e.target.content);  //载入内容
+                infoWindow.open(myMap, e.target.getPosition());  //打开
+                $("#map_about ul").text("").append(e.target.content);
+                console.log(i);
+                //marker.setAnimation('AMAP_ANIMATION_BOUNCE');   /*** 图标跳动 ***/
+                /* cluster = new AMap.MarkerClusterer(map, markers,{gridSize:80}); */
+            }    
+            myMap.setFitView();    
+        }
+    </script>
+</body>
+</html>

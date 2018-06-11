@@ -1,0 +1,117 @@
+@charset "UTF-8";
+/** 
+运维定位公共样式表 
+**/
+html {
+  margin: 0;
+  padding: 0;
+  font: inherit;
+  font-size: 14px;
+  vertical-align: baseline; }
+
+body {
+  font-family: arial, "Hiragino Sans GB", "Microsoft Yahei","iconfont" , 微软雅黑, 宋体, Tahoma, Arial, Helvetica, STHeiti !important; }
+
+.Fl {
+  float: left; }
+
+.Fr {
+  float: right; }
+
+a {
+  text-decoration: none !important;
+  outline: none; }
+
+/* html a:focus{color:#428bca!important;}  */
+ul {
+  padding: 0; }
+
+li {
+  list-style-type: none; }
+
+img {
+  vertical-align: middle; }
+
+button {
+  outline: none !important; }
+
+.tb {
+  display: table; }
+
+/**垂直居中方法1**/
+.child {
+  display: table-cell;
+  vertical-align: middle; }
+
+.middle {
+  text-align: center; }
+
+/**垂直居中方法2**/
+/* 对象必须为 inline-block */
+.middle:before {
+  content: '';
+  display: inline-block;
+  width: 0;
+  height: 100%;
+  vertical-align: middle;
+  margin-right: -0.25em;
+  /* 调整伪元素所占宽比 */ }
+
+.lin {
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%; }
+
+.re {
+  position: relative; }
+
+.f16 {
+  font-size: 16px !important; }
+
+.border0 {
+  border: 0 !important; }
+
+html .textc {
+  text-align: center !important; }
+
+html .textl {
+  text-align: left !important; }
+
+.all_trans {
+  transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  /* Firefox 4 */
+  -webkit-transition: all 0.3s;
+  /* Safari 和 Chrome */
+  -o-transition: all 0.3s; }
+
+.margin0 {
+  margin: 0 !important; }
+
+.margin_r5 {
+  margin-right: 5px; }
+
+.margin_t15 {
+  margin-top: 15px; }
+
+.padding0 {
+  padding: 0 !important; }
+
+.padding15 {
+  padding: 15px !important; }
+
+.button_inbg {
+  background: -moz-linear-gradient(90deg, #057cc7 0%, #299be3 100%);
+  /** 按钮 渐变 **/
+  background: -webkit-linear-gradient(90deg, #057cc7 0%, #299be3 100%);
+  background: -ms-linear-gradient(90deg, #057cc7 0%, #299be3 100%); }
+
+.shadow01 {
+  -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0px 10px rgba(0, 0, 0, 0.2); }
+
+/** 公共阴影 **/
