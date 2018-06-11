@@ -63,6 +63,7 @@
             <section class="map" id="map">
                                 
             </section>
+            <div class="map_top shadow01">附近人员<span id="map_num">10</span>人</div>
         </div>
     </div>  
 
@@ -118,10 +119,12 @@
             */
 
         function mapInit(){
+            var myMapCenter = [113.246439,23.115945];  //本地图圆心位置
+            //console.log(myMapCenterString);
             myMap = new AMap.Map("map",{
-                zooms: [12,14],
-                zoom:13,//级别
-                center: [113.246439,23.115945],//中心点坐标
+                zooms: [13,15],
+                zoom:14,//级别
+                center: myMapCenter,//中心点坐标  [113.246439,23.115945]
                 viewMode:'2D', //使用3D视图
                 lang:'zh_cn',
             });
@@ -133,6 +136,21 @@
                 success:function(data){
                     markers = data;
                     console.log(markers);
+                    //myMapCenterString = "113.246439", "23.115945";
+                    circle = new AMap.Circle({
+                        center: new AMap.LngLat(myMapCenter[0],myMapCenter[1]), // 圆心位置  "113.246439", "23.115945"  
+                        radius: 5000,  //半径
+                        strokeColor: "#F33",  //线颜色
+                        strokeOpacity: 0,  //线透明度
+                        strokeWeight: 0,  //线粗细度
+                        fillColor: "#ee2200",  //填充颜色
+                        fillOpacity: 0.35 //填充透明度
+                    });
+
+                    // 将以上覆盖物添加到地图上
+                    // 单独将点标记添加到地图上
+                    myMap.add(circle);
+
                     markers.forEach(function(myMarker,item,array){  //myMarker=遍历的数组内容 item=数组索引 array=数组本身
                         window["marker"+item] = new AMap.Marker({   //存储全局对象 window["marker"+item]
                             map:myMap, //地图对象
@@ -149,33 +167,56 @@
                         //console.log(window["marker"+item]._amap_id);  
                         window["marker"+item].setAnimation("AMAP_ANIMATION_NONE");                
                         window["marker"+item].on('click', markerClick);
-                    })       
+                    })      
+                        
+                    //dis = myMap.getAllOverlays("marker");  //获取地图覆盖物为marker 的数组
+
                     var infoWindow = new AMap.InfoWindow({offset: new AMap.Pixel(0, -30)}); 
                     //marker点击
                     function markerClick(e){           
                         //infoWindow.setContent(e.target.content);  //载入内容
                         //infoWindow.open(myMap, e.target.getPosition());  //打开
                         $("#map_about ul").text("").append(e.target.content);
-
                         markers.forEach(function(content,item,array){ 
                             window["marker"+item].setAnimation("AMAP_ANIMATION_NONE");   //所有marker 停止跳动
                         })            
                         var markerIconA = e.target.setAnimation("AMAP_ANIMATION_BOUNCE");    //当前marker 停止跳动  
-                        console.log(e.target); 
-                        window["ID"] = e.target._amap_id;   //存储当前跳动marker  ID 
-                    }     
+                        window["ID"] = e.target._amap_id;   //存储当前跳动marker  ID    
+                    }   
 
                     myMap.on("complete",function(){ //地图初始化完成后，默认选中id为1的marker
-                        markerSearch(markers,1);  
-                    })
-                    myMap.setFitView(); 
+                        markerSearch(markers,1);
+                        isInC();                
+                        myMap.on("mapmove",function(){   //地图平移
+                            isInC();
+                        }) 
+                    })                        
+                    myMap.setFitView(); //地图适应marker数量显示
                 },
                 error:function(){
                     console.log("传输错误")
                 }
-            })
-               
+            })               
         }
+
+        //判断marker是否在圆圈内，计算是的数量
+        function isInC(){
+            var centerP = new Array(); 
+            var centerPL = myMap.getCenter().lng;
+            var centerPR = myMap.getCenter().lat;
+            centerP = new Array(centerPL,centerPR);   //获取地图中心坐标
+            circle.setCenter(centerP);    //设置圆中心坐标'
+            var isInC = new Array(); 
+            markers.forEach(function(content,item,array){ 
+                var isI = circle.contains(content.position); //判断点是非在圆内
+                if(isI==true){
+                    isInC.push(isI);
+                }
+            }) 
+            //console.log(isInC);
+            var isInCNum = isInC.length;
+            document.getElementById("map_num").innerHTML=isInCNum;
+        }        
 
         //选择跳动marker以及右侧对应信息变动
         function markerSearch(array,id){  //array=数组, id 从1开始          
@@ -194,9 +235,9 @@
                             break aaa;
                         }else{
                             var $id = window["ID"];
+                        }
                             //alert(2);
                             //console.log("mamsmmamsam"+ $id);
-                        }
                     }
                 }else{            
                     var $id = window["ID"]; 
@@ -206,8 +247,7 @@
                 var $id = id-1; 
                 window["ID"] = $id;   //存储当前所处ID
             }   
-            
-            //console.log($id);           
+                      
             var $array = array;   
             var tpl ='<li>组织：'+$array[$id].organize+'</li>'
                 +'<li>ID：'+$array[$id].id+'</li>'
